@@ -1,10 +1,12 @@
+import { BrowserRouter as Router } from 'react-router-dom';
+import Navbar from './components/Navbar';
 import './App.css';
 
 function App() {
 	return (
-		<div>
-			<h1>Blog User</h1>
-		</div>
+		<Router basename={process.env.PUBLIC_URL}>
+			<Navbar />
+		</Router>
 	);
 }
 
