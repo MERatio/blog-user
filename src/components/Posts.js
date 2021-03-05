@@ -8,7 +8,7 @@ function Posts() {
 	const { path } = useRouteMatch();
 
 	useEffect(() => {
-		async function fetchAndSetPostsComments() {
+		async function fetchAndSetPostsWithCommentsCount() {
 			const response = await fetch(
 				'https://blog-api-97575.herokuapp.com/posts'
 			);
@@ -27,7 +27,7 @@ function Posts() {
 			setPostsWithCommentsCount(newPostsWithCommentsCount);
 		}
 
-		fetchAndSetPostsComments();
+		fetchAndSetPostsWithCommentsCount();
 	}, []);
 
 	return (
