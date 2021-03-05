@@ -6,7 +6,7 @@ import {
 	Redirect,
 } from 'react-router-dom';
 import Navbar from './components/Navbar';
-
+import Posts from './components/Posts';
 import './App.css';
 
 function App() {
@@ -29,6 +29,11 @@ function App() {
 				<Switch>
 					<Route exact path="/">
 						<Redirect to="/posts" />
+					</Route>
+					<Route path="/posts">
+						<div className="container">
+							<Posts posts={posts} />
+						</div>
 					</Route>
 				</Switch>
 			</main>
