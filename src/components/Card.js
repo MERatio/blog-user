@@ -7,7 +7,7 @@ function Card({ item }) {
 		<div className="card">
 			<div className="card-body">
 				<h5 className="card-title">{item.title}</h5>
-				<p className="card-subtitle mb-2 text-muted">
+				<p className="card-subtitle mb-2">
 					{item.author.firstName + ' ' + item.author.lastName}
 				</p>
 				<p className="card-subtitle mb-2 text-muted">
