@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { postData } from '../lib/helpers';
 
 function SignUpForm() {
 	const [state, setState] = useState({
@@ -16,8 +17,27 @@ function SignUpForm() {
 		setState((prevState) => ({ ...prevState, [name]: value }));
 	}
 
+	async function handleSubmit(e) {
+		e.preventDefault();
+		const data = await postData(
+			'https://blog-api-97575.herokuapp.com/users',
+			state
+		);
+		if (data.errors) {
+			setState({
+				firstName: data.userFormData.firstName,
+				lastName: data.userFormData.lastName,
+				username: data.userFormData.username,
+				password: '',
+				confirmPassword: '',
+			});
+		} else {
+			window.location.replace('/');
+		}
+	}
+
 	return (
-		<form>
+		<form onSubmit={handleSubmit}>
 			<div className="form-group">
 				<label htmlFor="firstName">First name</label>
 				<input
