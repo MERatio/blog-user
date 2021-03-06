@@ -12,7 +12,7 @@ function Card({ item }) {
 					{item.author.firstName + ' ' + item.author.lastName}
 				</p>
 				<p className="card-text">{item.body}</p>
-				<Link to={`${url}/${item._id}/comments`} className="card-link">
+				<Link to={`${url}/${item._id}`} className="card-link">
 					{item.commentsCount} comments
 				</Link>
 			</div>
