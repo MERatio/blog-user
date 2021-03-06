@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Switch, Route, useRouteMatch } from 'react-router-dom';
 import Cards from './Cards';
+import Post from './Post';
 
 function Posts() {
 	const [postsWithCommentsCount, setPostsWithCommentsCount] = useState([]);
@@ -34,6 +35,9 @@ function Posts() {
 		<Switch>
 			<Route exact path={path}>
 				<Cards items={postsWithCommentsCount} />
+			</Route>
+			<Route exact path={`${path}/:postId`}>
+				<Post posts={postsWithCommentsCount} />
 			</Route>
 		</Switch>
 	);
