@@ -89,6 +89,7 @@ function SignUpForm() {
 					name="password"
 					value={state.password}
 					required
+					minLength="8"
 					onChange={handleInputChange}
 				/>
 			</div>
@@ -101,6 +102,7 @@ function SignUpForm() {
 					name="confirmPassword"
 					value={state.confirmPassword}
 					required
+					minLength="8"
 					onChange={handleInputChange}
 				/>
 			</div>
