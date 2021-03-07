@@ -33,7 +33,11 @@ function SignUpForm() {
 				password: '',
 				confirmPassword: '',
 			});
+			window.flashes(data.errors);
 		} else {
+			window.flashes([
+				{ msg: 'You have successfuly signed up', type: 'success' },
+			]);
 			history.push('/');
 		}
 	}
