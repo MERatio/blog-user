@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { postData } from '../lib/helpers';
+import SubmitBtn from './SubmitBtn';
 
 function SignUpForm() {
 	const history = useHistory();
@@ -11,6 +12,7 @@ function SignUpForm() {
 		password: '',
 		confirmPassword: '',
 	});
+	const [isSubmitting, setIsSubmitting] = useState(false);
 
 	function handleInputChange(e) {
 		const target = e.target;
@@ -21,10 +23,12 @@ function SignUpForm() {
 
 	async function handleSubmit(e) {
 		e.preventDefault();
+		setIsSubmitting(true);
 		const data = await postData(
 			'https://blog-api-97575.herokuapp.com/users',
 			state
 		);
+		setIsSubmitting(false);
 		if (data.errors) {
 			setState({
 				firstName: data.userFormData.firstName,
@@ -112,9 +116,7 @@ function SignUpForm() {
 					onChange={handleInputChange}
 				/>
 			</div>
-			<button type="submit" className="btn btn-primary w-100">
-				Submit
-			</button>
+			<SubmitBtn isSubmitting={isSubmitting} />
 		</form>
 	);
 }
