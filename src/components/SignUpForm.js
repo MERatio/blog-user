@@ -1,7 +1,9 @@
 import { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import { postData } from '../lib/helpers';
 
 function SignUpForm() {
+	const history = useHistory();
 	const [state, setState] = useState({
 		firstName: '',
 		lastName: '',
@@ -32,7 +34,7 @@ function SignUpForm() {
 				confirmPassword: '',
 			});
 		} else {
-			window.location.replace('/');
+			history.push('/');
 		}
 	}
 
