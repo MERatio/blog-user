@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { postData } from '../lib/helpers';
+import { postData, handleExpressErr } from '../lib/helpers';
 import SubmitBtn from './SubmitBtn';
 
 function SignUpForm() {
@@ -29,7 +29,9 @@ function SignUpForm() {
 			state
 		);
 		setIsSubmitting(false);
-		if (data.errors) {
+		if (data.err) {
+			handleExpressErr(data.err);
+		} else if (data.errors) {
 			setState({
 				firstName: data.userFormData.firstName,
 				lastName: data.userFormData.lastName,

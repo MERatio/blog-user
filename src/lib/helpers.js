@@ -9,4 +9,8 @@ async function postData(url = '', data = {}) {
 	return await response.json();
 }
 
-export { postData };
+function handleExpressErr(err) {
+	window.flashes([{ msg: err.message }]);
+}
+
+export { postData, handleExpressErr };
