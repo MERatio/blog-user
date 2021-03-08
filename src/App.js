@@ -10,6 +10,7 @@ import Navbar from './components/Navbar';
 import Flashes from './components/Flashes';
 import Posts from './components/Posts';
 import SignUpForm from './components/SignUpForm';
+import SignInForm from './components/SignInForm';
 import './App.css';
 
 function App() {
@@ -42,6 +43,15 @@ function App() {
 							<div className="row justify-content-center">
 								<div className="col-md-6">
 									<SignUpForm />
+								</div>
+							</div>
+						</div>
+					</Route>
+					<Route exact path="/sign-in">
+						<div className="container">
+							<div className="row justify-content-center">
+								<div className="col-md-6">
+									<SignInForm />
 								</div>
 							</div>
 						</div>
