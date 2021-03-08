@@ -10,16 +10,14 @@ function Posts() {
 
 	useEffect(() => {
 		async function fetchAndSetPostsWithCommentsCount() {
-			const response = await fetch(
-				'https://blog-api-97575.herokuapp.com/posts'
-			);
+			const response = await fetch(`${process.env.REACT_APP_API_URL}/posts`);
 			const data = await response.json();
 			const posts = data.posts;
 
 			const newPostsWithCommentsCount = await Promise.all(
 				posts.map(async (post) => {
 					const response = await fetch(
-						`https://blog-api-97575.herokuapp.com/posts/${post._id}/comments`
+						`${process.env.REACT_APP_API_URL}/posts/${post._id}/comments`
 					);
 					const data = await response.json();
 					return { ...post, commentsCount: data.comments.length };

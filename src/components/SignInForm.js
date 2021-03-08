@@ -21,10 +21,7 @@ function SignInForm() {
 	async function handleSubmit(e) {
 		e.preventDefault();
 		setIsSubmitting(true);
-		const data = await postData(
-			'https://blog-api-97575.herokuapp.com/auth',
-			state
-		);
+		const data = await postData(`${process.env.REACT_APP_API_URL}/auth`, state);
 		setIsSubmitting(false);
 		if (data.err) {
 			setState((prevState) => ({ ...prevState, password: '' }));

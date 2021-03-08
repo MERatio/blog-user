@@ -8,7 +8,7 @@ function PostComments({ postId }) {
 	useEffect(() => {
 		async function fetchAndSetPostComments(postId) {
 			const response = await fetch(
-				`https://blog-api-97575.herokuapp.com/posts/${postId}/comments`
+				`${process.env.REACT_APP_API_URL}/posts/${postId}/comments`
 			);
 			const data = await response.json();
 			setPostComments(data.comments);

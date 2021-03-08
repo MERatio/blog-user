@@ -25,7 +25,7 @@ function SignUpForm() {
 		e.preventDefault();
 		setIsSubmitting(true);
 		const data = await postData(
-			'https://blog-api-97575.herokuapp.com/users',
+			`${process.env.REACT_APP_API_URL}/users`,
 			state
 		);
 		setIsSubmitting(false);
