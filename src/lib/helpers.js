@@ -6,7 +6,7 @@ async function postData(url = '', data = {}) {
 		},
 		body: JSON.stringify(data),
 	});
-	return await response.json();
+	return response.json();
 }
 
 function handleExpressErr(err) {
