@@ -31,7 +31,7 @@ function SignInForm() {
 				setState((prevState) => ({ ...prevState, password: '' }));
 				handleExpressErr(data.err);
 			} else {
-				localStorage.setItem('jwtToken', data.token);
+				localStorage.setItem('jwt', data.token);
 				window.flashes([
 					{ msg: 'You have successfuly signed in', type: 'success' },
 				]);
