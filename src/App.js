@@ -66,7 +66,7 @@ function App() {
 						<div className="container">
 							<div className="row justify-content-center">
 								<div className="col-md-6">
-									<SignInForm />
+									<SignInForm setUser={setUser} />
 								</div>
 							</div>
 						</div>

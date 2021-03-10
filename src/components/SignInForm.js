@@ -1,9 +1,10 @@
 import { useState } from 'react';
+import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import { postData, handleExpressErr } from '../lib/helpers';
 import SubmitBtn from './SubmitBtn';
 
-function SignInForm() {
+function SignInForm({ setUser }) {
 	const history = useHistory();
 	const [state, setState] = useState({
 		username: '',
@@ -32,6 +33,7 @@ function SignInForm() {
 				handleExpressErr(data.err);
 			} else {
 				localStorage.setItem('jwt', data.token);
+				setUser(data.user);
 				window.flashes([
 					{ msg: 'You have successfuly signed in', type: 'success' },
 				]);
@@ -78,5 +80,9 @@ function SignInForm() {
 		</form>
 	);
 }
+
+SignInForm.propTypes = {
+	setUser: PropTypes.func.isRequired,
+};
 
 export default SignInForm;
