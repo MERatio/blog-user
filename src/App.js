@@ -35,7 +35,7 @@ function App() {
 
 	return (
 		<Router basename={process.env.PUBLIC_URL}>
-			<Navbar />
+			<Navbar user={user} />
 			<div className="container">
 				<div className="row justify-content-center">
 					<div className="col-md-8">
