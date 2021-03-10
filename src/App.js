@@ -1,10 +1,11 @@
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import {
 	BrowserRouter as Router,
 	Switch,
 	Route,
 	Redirect,
 } from 'react-router-dom';
+import { getData } from './lib/helpers';
 import Bus from './utils/Bus';
 import Navbar from './components/Navbar';
 import Flashes from './components/Flashes';
@@ -14,8 +15,22 @@ import SignInForm from './components/SignInForm';
 import './App.css';
 
 function App() {
+	const [user, setUser] = useState(false);
+
 	useEffect(() => {
 		window.flashes = (flashes) => Bus.emit('flashes', flashes);
+	}, []);
+
+	useEffect(() => {
+		async function getCurrentUser() {
+			const data = await getData(
+				`${process.env.REACT_APP_API_URL}/users/current-user`
+			);
+			setUser(data.user);
+		}
+		getCurrentUser();
+		const intervalId = setInterval(getCurrentUser, 30000);
+		return () => clearInterval(intervalId);
 	}, []);
 
 	return (
