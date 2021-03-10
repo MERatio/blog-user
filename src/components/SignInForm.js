@@ -19,22 +19,29 @@ function SignInForm() {
 	}
 
 	async function handleSubmit(e) {
-		e.preventDefault();
-		setIsSubmitting(true);
-		const data = await postData(
-			`${process.env.REACT_APP_API_URL}/auth/sign-in`,
-			state
-		);
-		setIsSubmitting(false);
-		if (data.err) {
-			setState((prevState) => ({ ...prevState, password: '' }));
-			handleExpressErr(data.err);
-		} else {
-			localStorage.setItem('jwtToken', data.token);
+		try {
+			e.preventDefault();
+			setIsSubmitting(true);
+			const data = await postData(
+				`${process.env.REACT_APP_API_URL}/auth/sign-in`,
+				state
+			);
+			setIsSubmitting(false);
+			if (data.err) {
+				setState((prevState) => ({ ...prevState, password: '' }));
+				handleExpressErr(data.err);
+			} else {
+				localStorage.setItem('jwtToken', data.token);
+				window.flashes([
+					{ msg: 'You have successfuly signed in', type: 'success' },
+				]);
+				history.push('/');
+			}
+		} catch (err) {
+			setIsSubmitting(false);
 			window.flashes([
-				{ msg: 'You have successfuly signed in', type: 'success' },
+				{ msg: 'Something went wrong, please try again later.' },
 			]);
-			history.push('/');
 		}
 	}
 
