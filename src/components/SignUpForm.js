@@ -22,29 +22,35 @@ function SignUpForm() {
 	}
 
 	async function handleSubmit(e) {
-		e.preventDefault();
-		setIsSubmitting(true);
-		const data = await postData(
-			`${process.env.REACT_APP_API_URL}/users`,
-			state
-		);
-		setIsSubmitting(false);
-		if (data.err) {
-			handleExpressErr(data.err);
-		} else if (data.errors) {
-			setState({
-				firstName: data.userFormData.firstName,
-				lastName: data.userFormData.lastName,
-				username: data.userFormData.username,
-				password: '',
-				confirmPassword: '',
-			});
-			window.flashes(data.errors);
-		} else {
+		try {
+			e.preventDefault();
+			setIsSubmitting(true);
+			const data = await postData(
+				`${process.env.REACT_APP_API_URL}/users`,
+				state
+			);
+			setIsSubmitting(false);
+			if (data.err) {
+				handleExpressErr(data.err);
+			} else if (data.errors) {
+				setState({
+					firstName: data.userFormData.firstName,
+					lastName: data.userFormData.lastName,
+					username: data.userFormData.username,
+					password: '',
+					confirmPassword: '',
+				});
+				window.flashes(data.errors);
+			} else {
+				window.flashes([
+					{ msg: 'You have successfuly signed up', type: 'success' },
+				]);
+				history.push('/');
+			}
+		} catch (err) {
 			window.flashes([
-				{ msg: 'You have successfuly signed up', type: 'success' },
+				{ msg: 'Something went wrong, please try again later.' },
 			]);
-			history.push('/');
 		}
 	}
 
