@@ -10,35 +10,36 @@ function Posts() {
 
 	const { path } = useRouteMatch();
 
-	useEffect(() => {
-		async function fetchAndSetPostsWithComments() {
-			try {
-				const data = await getData(`${process.env.REACT_APP_API_URL}/posts`);
-				const posts = data.posts;
-				if (data.err) {
-					handleExpressErr(data.err);
-					return;
-				}
-
-				const newPostsWithComments = await Promise.all(
-					posts.map(async (post) => {
-						const data = await getData(
-							`${process.env.REACT_APP_API_URL}/posts/${post._id}/comments`
-						);
-						if (data.err) {
-							handleExpressErr(data.err);
-							return;
-						}
-						return { ...post, comments: data.comments };
-					})
-				);
-				setPostsWithComments(newPostsWithComments);
-			} catch (err) {
-				window.flashes([
-					{ msg: 'Something went wrong, please try again later.' },
-				]);
+	async function fetchAndSetPostsWithComments() {
+		try {
+			const data = await getData(`${process.env.REACT_APP_API_URL}/posts`);
+			const posts = data.posts;
+			if (data.err) {
+				handleExpressErr(data.err);
+				return;
 			}
+
+			const newPostsWithComments = await Promise.all(
+				posts.map(async (post) => {
+					const data = await getData(
+						`${process.env.REACT_APP_API_URL}/posts/${post._id}/comments`
+					);
+					if (data.err) {
+						handleExpressErr(data.err);
+						return;
+					}
+					return { ...post, comments: data.comments };
+				})
+			);
+			setPostsWithComments(newPostsWithComments);
+		} catch (err) {
+			window.flashes([
+				{ msg: 'Something went wrong, please try again later.' },
+			]);
 		}
+	}
+
+	useEffect(() => {
 		fetchAndSetPostsWithComments();
 	}, []);
 
@@ -50,7 +51,10 @@ function Posts() {
 				<Cards items={postsWithComments} />
 			</Route>
 			<Route exact path={`${path}/:postId`}>
-				<Post posts={postsWithComments} />
+				<Post
+					posts={postsWithComments}
+					fetchAndSetPostsWithComments={fetchAndSetPostsWithComments}
+				/>
 			</Route>
 		</Switch>
 	);
