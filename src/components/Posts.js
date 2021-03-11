@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Switch, Route, useRouteMatch } from 'react-router-dom';
-import { getData } from '../lib/helpers';
+import { getData, handleExpressErr } from '../lib/helpers';
 import BootstrapSpinner from '../components/BootstrapSpinner';
 import Cards from './Cards';
 import Post from './Post';
@@ -15,12 +15,20 @@ function Posts() {
 			try {
 				const data = await getData(`${process.env.REACT_APP_API_URL}/posts`);
 				const posts = data.posts;
+				if (data.err) {
+					handleExpressErr(data.err);
+					return;
+				}
 
 				const newPostsWithComments = await Promise.all(
 					posts.map(async (post) => {
 						const data = await getData(
 							`${process.env.REACT_APP_API_URL}/posts/${post._id}/comments`
 						);
+						if (data.err) {
+							handleExpressErr(data.err);
+							return;
+						}
 						return { ...post, comments: data.comments };
 					})
 				);
