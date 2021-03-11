@@ -52,11 +52,12 @@ function App() {
 						<Redirect to="/posts" />
 					</Route>
 					<Route path="/posts">
-						<div
-							className="container position-relative"
-							style={{ minHeight: '50%' }}
-						>
-							<Posts />
+						<div className="h-100 container">
+							<div className="h-100 row justify-content-center">
+								<div className="col-md-8 position-relative">
+									<Posts />
+								</div>
+							</div>
 						</div>
 					</Route>
 					<Route exact path="/sign-up">
