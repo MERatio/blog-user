@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 
-function SubmitBtn({ isSubmitting }) {
+function SubmitBtn({ text, isSubmitting }) {
 	return isSubmitting ? (
 		<button type="submit" className="btn btn-primary w-100" disabled>
 			<span
@@ -12,12 +12,17 @@ function SubmitBtn({ isSubmitting }) {
 		</button>
 	) : (
 		<button type="submit" className="btn btn-primary w-100">
-			Submit
+			{text}
 		</button>
 	);
 }
 
+SubmitBtn.defaultProps = {
+	text: 'Submit',
+};
+
 SubmitBtn.propTypes = {
+	text: PropTypes.string.isRequired,
 	isSubmitting: PropTypes.bool.isRequired,
 };
 
