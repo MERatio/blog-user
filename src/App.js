@@ -7,6 +7,7 @@ import {
 } from 'react-router-dom';
 import { getData } from './lib/helpers';
 import Bus from './utils/Bus';
+import BootstrapSpinner from './components/BootstrapSpinner';
 import Navbar from './components/Navbar';
 import Flashes from './components/Flashes';
 import Posts from './components/Posts';
@@ -15,7 +16,7 @@ import SignInForm from './components/SignInForm';
 import './App.css';
 
 function App() {
-	const [user, setUser] = useState(false);
+	const [user, setUser] = useState(null);
 
 	useEffect(() => {
 		window.flashes = (flashes) => Bus.emit('flashes', flashes);
@@ -33,7 +34,9 @@ function App() {
 		return () => clearInterval(intervalId);
 	}, []);
 
-	return (
+	return user === null ? (
+		<BootstrapSpinner type={'grow'} size={'3em'} />
+	) : (
 		<Router basename={process.env.PUBLIC_URL}>
 			<Navbar user={user} />
 			<div className="container">
