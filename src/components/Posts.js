@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Switch, Route, useRouteMatch } from 'react-router-dom';
+import { getData } from '../lib/helpers';
 import BootstrapSpinner from '../components/BootstrapSpinner';
 import Cards from './Cards';
 import Post from './Post';
@@ -11,22 +12,25 @@ function Posts() {
 
 	useEffect(() => {
 		async function fetchAndSetPostsWithComments() {
-			const response = await fetch(`${process.env.REACT_APP_API_URL}/posts`);
-			const data = await response.json();
-			const posts = data.posts;
+			try {
+				const data = await getData(`${process.env.REACT_APP_API_URL}/posts`);
+				const posts = data.posts;
 
-			const newPostsWithComments = await Promise.all(
-				posts.map(async (post) => {
-					const response = await fetch(
-						`${process.env.REACT_APP_API_URL}/posts/${post._id}/comments`
-					);
-					const data = await response.json();
-					return { ...post, comments: data.comments };
-				})
-			);
-			setPostsWithComments(newPostsWithComments);
+				const newPostsWithComments = await Promise.all(
+					posts.map(async (post) => {
+						const data = await getData(
+							`${process.env.REACT_APP_API_URL}/posts/${post._id}/comments`
+						);
+						return { ...post, comments: data.comments };
+					})
+				);
+				setPostsWithComments(newPostsWithComments);
+			} catch (err) {
+				window.flashes([
+					{ msg: 'Something went wrong, please try again later.' },
+				]);
+			}
 		}
-
 		fetchAndSetPostsWithComments();
 	}, []);
 
