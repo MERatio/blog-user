@@ -5,40 +5,40 @@ import Cards from './Cards';
 import Post from './Post';
 
 function Posts() {
-	const [postsWithCommentsCount, setPostsWithCommentsCount] = useState([]);
+	const [postsWithComments, setPostsWithComments] = useState([]);
 
 	const { path } = useRouteMatch();
 
 	useEffect(() => {
-		async function fetchAndSetPostsWithCommentsCount() {
+		async function fetchAndSetPostsWithComments() {
 			const response = await fetch(`${process.env.REACT_APP_API_URL}/posts`);
 			const data = await response.json();
 			const posts = data.posts;
 
-			const newPostsWithCommentsCount = await Promise.all(
+			const newPostsWithComments = await Promise.all(
 				posts.map(async (post) => {
 					const response = await fetch(
 						`${process.env.REACT_APP_API_URL}/posts/${post._id}/comments`
 					);
 					const data = await response.json();
-					return { ...post, commentsCount: data.comments.length };
+					return { ...post, comments: data.comments };
 				})
 			);
-			setPostsWithCommentsCount(newPostsWithCommentsCount);
+			setPostsWithComments(newPostsWithComments);
 		}
 
-		fetchAndSetPostsWithCommentsCount();
+		fetchAndSetPostsWithComments();
 	}, []);
 
-	return postsWithCommentsCount.length < 1 ? (
+	return postsWithComments.length < 1 ? (
 		<BootstrapSpinner type={'border'} size={'2em'} />
 	) : (
 		<Switch>
 			<Route exact path={path}>
-				<Cards items={postsWithCommentsCount} />
+				<Cards items={postsWithComments} />
 			</Route>
 			<Route exact path={`${path}/:postId`}>
-				<Post posts={postsWithCommentsCount} />
+				<Post posts={postsWithComments} />
 			</Route>
 		</Switch>
 	);

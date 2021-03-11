@@ -1,26 +1,8 @@
-import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import format from 'date-fns/format';
-import BootstrapSpinner from '../components/BootstrapSpinner';
 
-function PostComments({ postId }) {
-	const [postComments, setPostComments] = useState([]);
-
-	useEffect(() => {
-		async function fetchAndSetPostComments(postId) {
-			const response = await fetch(
-				`${process.env.REACT_APP_API_URL}/posts/${postId}/comments`
-			);
-			const data = await response.json();
-			setPostComments(data.comments);
-		}
-
-		fetchAndSetPostComments(postId);
-	}, [postId]);
-
-	return postComments.length < 1 ? (
-		<BootstrapSpinner type={'border'} size={'2em'} />
-	) : (
+function PostComments({ postComments }) {
+	return (
 		<ul className="list-group">
 			{postComments.map((postComment) => (
 				<li key={postComment._id} className="list-group-item">
@@ -38,7 +20,7 @@ function PostComments({ postId }) {
 }
 
 PostComments.propTypes = {
-	postId: PropTypes.string.isRequired,
+	postComments: PropTypes.array.isRequired,
 };
 
 export default PostComments;

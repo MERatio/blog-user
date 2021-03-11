@@ -17,7 +17,7 @@ function Card({ item }) {
 			<div className="card-body">
 				<p className="card-text">{item.body}</p>
 				<Link to={`/posts/${item._id}`} className="card-link">
-					{item.commentsCount} comments
+					{item.comments.length} comments
 				</Link>
 			</div>
 		</div>
