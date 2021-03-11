@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import format from 'date-fns/format';
+import BootstrapSpinner from '../components/BootstrapSpinner';
 
 function PostComments({ postId }) {
 	const [postComments, setPostComments] = useState([]);
@@ -17,7 +18,9 @@ function PostComments({ postId }) {
 		fetchAndSetPostComments(postId);
 	}, [postId]);
 
-	return (
+	return postComments.length < 1 ? (
+		<BootstrapSpinner type={'border'} size={'2em'} />
+	) : (
 		<ul className="list-group">
 			{postComments.map((postComment) => (
 				<li key={postComment._id} className="list-group-item">

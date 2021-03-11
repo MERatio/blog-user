@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Switch, Route, useRouteMatch } from 'react-router-dom';
+import BootstrapSpinner from '../components/BootstrapSpinner';
 import Cards from './Cards';
 import Post from './Post';
 
@@ -29,7 +30,9 @@ function Posts() {
 		fetchAndSetPostsWithCommentsCount();
 	}, []);
 
-	return (
+	return postsWithCommentsCount.length < 1 ? (
+		<BootstrapSpinner type={'border'} size={'2em'} />
+	) : (
 		<Switch>
 			<Route exact path={path}>
 				<Cards items={postsWithCommentsCount} />

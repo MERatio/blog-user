@@ -10,7 +10,9 @@ function Post({ posts }) {
 	return post ? (
 		<section className="mb-4">
 			<Card item={post} />
-			<PostComments postId={postId} />
+			<div className="position-relative" style={{ minHeight: '5em' }}>
+				<PostComments postId={postId} />
+			</div>
 		</section>
 	) : null;
 }

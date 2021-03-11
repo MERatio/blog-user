@@ -46,13 +46,16 @@ function App() {
 					</div>
 				</div>
 			</div>
-			<main>
+			<main className="h-100">
 				<Switch>
 					<Route exact path="/">
 						<Redirect to="/posts" />
 					</Route>
 					<Route path="/posts">
-						<div className="container">
+						<div
+							className="container position-relative"
+							style={{ minHeight: '50%' }}
+						>
 							<Posts />
 						</div>
 					</Route>
