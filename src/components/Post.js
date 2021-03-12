@@ -64,7 +64,7 @@ function Post({ user }) {
 	return postWithComments._id ? (
 		<section className="mb-4">
 			<Card item={postWithComments} />
-			{user && (
+			{user && postWithComments.published && (
 				<PostCommentForm
 					postId={postId}
 					updatePostComments={updatePostComments}
