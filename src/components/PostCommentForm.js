@@ -48,7 +48,7 @@ function PostCommentForm({ postId, updatePostComments }) {
 	}
 
 	return (
-		<form onSubmit={handleSubmit} className="py-2">
+		<form onSubmit={handleSubmit} className="mb-2">
 			<div className="form-group">
 				<label htmlFor="body">Write a comment</label>
 				<textarea
