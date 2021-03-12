@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { postData, handleExpressErr } from '../lib/helpers';
 import SubmitBtn from './SubmitBtn';
 
-function PostCommentForm({ postId, fetchAndSetPostsWithComments }) {
+function PostCommentForm({ postId, updatePostComments }) {
 	const [state, setState] = useState({
 		body: '',
 	});
@@ -25,11 +25,11 @@ function PostCommentForm({ postId, fetchAndSetPostsWithComments }) {
 				state
 			);
 			setIsSubmitting(false);
+			setState((prevState) => ({ ...prevState, body: '' }));
+			updatePostComments(postId);
 			window.flashes([
 				{ msg: 'Comment successfully created', type: 'success' },
 			]);
-			setState((prevState) => ({ ...prevState, body: '' }));
-			fetchAndSetPostsWithComments();
 			if (data.err) {
 				handleExpressErr(data.err);
 			} else if (data.errors) {
@@ -68,7 +68,7 @@ function PostCommentForm({ postId, fetchAndSetPostsWithComments }) {
 
 PostCommentForm.propTypes = {
 	postId: PropTypes.string.isRequired,
-	fetchAndSetPostsWithComments: PropTypes.func.isRequired,
+	updatePostComments: PropTypes.func.isRequired,
 };
 
 export default PostCommentForm;

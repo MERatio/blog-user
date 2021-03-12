@@ -11,6 +11,7 @@ import BootstrapSpinner from './components/BootstrapSpinner';
 import Navbar from './components/Navbar';
 import Flashes from './components/Flashes';
 import Posts from './components/Posts';
+import Post from './components/Post';
 import SignUpForm from './components/SignUpForm';
 import SignInForm from './components/SignInForm';
 import './App.css';
@@ -51,11 +52,20 @@ function App() {
 					<Route exact path="/">
 						<Redirect to="/posts" />
 					</Route>
-					<Route path="/posts">
+					<Route exact path="/posts">
 						<div className="h-100 container">
 							<div className="h-100 row justify-content-center">
 								<div className="col-md-8 position-relative">
 									<Posts />
+								</div>
+							</div>
+						</div>
+					</Route>
+					<Route exact path="/posts/:postId">
+						<div className="h-100 container">
+							<div className="h-100 row justify-content-center">
+								<div className="col-md-8 position-relative">
+									<Post />
 								</div>
 							</div>
 						</div>
