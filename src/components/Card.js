@@ -4,7 +4,7 @@ import format from 'date-fns/format';
 
 function Card({ item }) {
 	return (
-		<div className="card">
+		<div className="card mb-2">
 			<div className="card-header">
 				<h5 className="card-title">{item.title}</h5>
 				<p className="card-subtitle mb-2">
