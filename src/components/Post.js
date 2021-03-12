@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { useParams } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 import { getData, handleExpressErr } from '../lib/helpers';
 import BootstrapSpinner from '../components/BootstrapSpinner';
 import Card from './Card';
@@ -9,6 +9,8 @@ import PostComments from './PostComments';
 
 function Post({ user }) {
 	const { postId } = useParams();
+
+	const history = useHistory();
 
 	const [postWithComments, setPostWithComments] = useState({});
 
@@ -41,6 +43,9 @@ function Post({ user }) {
 					`${process.env.REACT_APP_API_URL}/posts/${postId}`
 				);
 				if (data.err) {
+					if ([401, 404].includes(data.err.status)) {
+						history.push('/');
+					}
 					handleExpressErr(data.err);
 				} else {
 					return data.post;
@@ -59,7 +64,7 @@ function Post({ user }) {
 		}
 
 		fetchAndSetPostWithComments(postId);
-	}, [postId]);
+	}, [postId, history]);
 
 	return postWithComments._id ? (
 		<section className="mb-4">
