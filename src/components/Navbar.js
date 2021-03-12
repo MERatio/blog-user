@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import { NavLink } from 'react-router-dom';
 
-function Navbar({ user }) {
+function Navbar({ user, signOut }) {
 	return (
 		<nav className="navbar navbar-expand-lg navbar-dark bg-primary sticky-top mb-4">
 			<NavLink to="/" className="navbar-brand">
@@ -41,6 +41,15 @@ function Navbar({ user }) {
 							>
 								{user.username}
 							</button>
+							<div className="dropdown-menu dropdown-menu-right">
+								<button
+									className="dropdown-item"
+									type="button"
+									onClick={signOut}
+								>
+									Sign out
+								</button>
+							</div>
 						</li>
 					) : (
 						<>
@@ -74,6 +83,7 @@ function Navbar({ user }) {
 
 Navbar.propTypes = {
 	user: PropTypes.oneOfType([PropTypes.bool, PropTypes.object]),
+	signOut: PropTypes.func.isRequired,
 };
 
 export default Navbar;
