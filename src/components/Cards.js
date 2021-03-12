@@ -2,11 +2,7 @@ import PropTypes from 'prop-types';
 import Card from './Card';
 
 function Cards({ items }) {
-	const cards = items.map((item) => (
-		<div key={item._id}>
-			<Card item={item} />
-		</div>
-	));
+	const cards = items.map((item) => <Card key={item._id} item={item} />);
 
 	return <section>{cards}</section>;
 }
