@@ -1,11 +1,5 @@
 import { useState, useEffect } from 'react';
-import {
-	BrowserRouter as Router,
-	Switch,
-	Route,
-	Redirect,
-} from 'react-router-dom';
-import { createBrowserHistory } from 'history';
+import { Switch, Route, Redirect, useHistory } from 'react-router-dom';
 import { getData } from './lib/helpers';
 import Bus from './utils/Bus';
 import BootstrapSpinner from './components/BootstrapSpinner';
@@ -18,7 +12,7 @@ import SignInForm from './components/SignInForm';
 import './App.css';
 
 function App() {
-	const history = createBrowserHistory();
+	const history = useHistory();
 
 	const [user, setUser] = useState(null);
 
@@ -50,7 +44,7 @@ function App() {
 	return user === null ? (
 		<BootstrapSpinner type={'grow'} size={'3em'} />
 	) : (
-		<Router basename={process.env.PUBLIC_URL}>
+		<>
 			<Navbar user={user} signOut={signOut} />
 			<div className="container">
 				<div className="row justify-content-center">
@@ -102,7 +96,7 @@ function App() {
 					</Route>
 				</Switch>
 			</main>
-		</Router>
+		</>
 	);
 }
 

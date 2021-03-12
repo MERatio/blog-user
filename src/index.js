@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { BrowserRouter as Router } from 'react-router-dom';
 import 'bootswatch/dist/litera/bootstrap.css';
 import 'bootstrap/dist/js/bootstrap.bundle.js';
 import './index.css';
@@ -10,7 +11,9 @@ require('dotenv').config();
 
 ReactDOM.render(
 	<React.StrictMode>
-		<App />
+		<Router basename={process.env.PUBLIC_URL}>
+			<App />
+		</Router>
 	</React.StrictMode>,
 	document.getElementById('root')
 );
