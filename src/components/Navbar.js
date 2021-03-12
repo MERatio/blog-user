@@ -20,7 +20,17 @@ function Navbar({ user }) {
 			</button>
 			<div className="collapse navbar-collapse" id="navbarSupportedContent">
 				<ul className="navbar-nav ml-auto">
-					{user && (
+					<li className="nav-item">
+						<NavLink
+							exact
+							to="/posts"
+							className="nav-link"
+							activeClassName="active"
+						>
+							Posts
+						</NavLink>
+					</li>
+					{user ? (
 						<li className="nav-item dropdown">
 							<button
 								className="nav-link btn btn-link dropdown-toggle"
@@ -32,18 +42,7 @@ function Navbar({ user }) {
 								{user.username}
 							</button>
 						</li>
-					)}
-					<li className="nav-item">
-						<NavLink
-							exact
-							to="/posts"
-							className="nav-link"
-							activeClassName="active"
-						>
-							Posts
-						</NavLink>
-					</li>
-					{!user && (
+					) : (
 						<>
 							<li className="nav-item">
 								<NavLink
