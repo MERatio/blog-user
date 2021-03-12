@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import { useParams } from 'react-router-dom';
 import { getData, handleExpressErr } from '../lib/helpers';
 import BootstrapSpinner from '../components/BootstrapSpinner';
@@ -6,7 +7,7 @@ import Card from './Card';
 import PostCommentForm from './PostCommentForm';
 import PostComments from './PostComments';
 
-function Post() {
+function Post({ user }) {
 	const { postId } = useParams();
 
 	const [postWithComments, setPostWithComments] = useState({});
@@ -63,15 +64,21 @@ function Post() {
 	return postWithComments._id ? (
 		<section className="mb-4">
 			<Card item={postWithComments} />
-			<PostCommentForm
-				postId={postId}
-				updatePostComments={updatePostComments}
-			/>
+			{user && (
+				<PostCommentForm
+					postId={postId}
+					updatePostComments={updatePostComments}
+				/>
+			)}
 			<PostComments postComments={postWithComments.comments} />
 		</section>
 	) : (
 		<BootstrapSpinner type={'border'} size={'2em'} />
 	);
 }
+
+Post.propTypes = {
+	user: PropTypes.oneOfType([PropTypes.bool, PropTypes.object]).isRequired,
+};
 
 export default Post;
