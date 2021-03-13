@@ -2,17 +2,18 @@ import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import useIsMounted from '../lib/useIsMounted';
+import useIsLoading from '../lib/useIsLoading';
 import { postData, handleExpressErr } from '../lib/helpers';
 import SubmitBtn from './SubmitBtn';
 
 function SignInForm({ setUser }) {
 	const isMounted = useIsMounted();
+	const [submitFormData, isSubmitting] = useIsLoading(postData);
 	const history = useHistory();
 	const [state, setState] = useState({
 		username: '',
 		password: '',
 	});
-	const [isSubmitting, setIsSubmitting] = useState(false);
 
 	function handleInputChange(e) {
 		const target = e.target;
@@ -24,12 +25,10 @@ function SignInForm({ setUser }) {
 	async function handleSubmit(e) {
 		try {
 			e.preventDefault();
-			isMounted && setIsSubmitting(true);
-			const data = await postData(
+			const data = await submitFormData(
 				`${process.env.REACT_APP_API_URL}/auth/sign-in`,
 				state
 			);
-			isMounted && setIsSubmitting(false);
 			if (data.err) {
 				isMounted && setState((prevState) => ({ ...prevState, password: '' }));
 				handleExpressErr(data.err);
@@ -42,7 +41,6 @@ function SignInForm({ setUser }) {
 				history.push('/');
 			}
 		} catch (err) {
-			isMounted && setIsSubmitting(false);
 			window.flashes([
 				{ msg: 'Something went wrong, please try again later.' },
 			]);

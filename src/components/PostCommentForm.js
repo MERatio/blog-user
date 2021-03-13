@@ -1,16 +1,17 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
 import useIsMounted from '../lib/useIsMounted';
+import useIsLoading from '../lib/useIsLoading';
 import { postData, handleExpressErr } from '../lib/helpers';
 import SubmitBtn from './SubmitBtn';
 
 function PostCommentForm({ postId, updatePostComments }) {
 	const isMounted = useIsMounted();
+	const [submitFormData, isSubmitting] = useIsLoading(postData);
 
 	const [state, setState] = useState({
 		body: '',
 	});
-	const [isSubmitting, setIsSubmitting] = useState(false);
 
 	function handleInputChange(e) {
 		const target = e.target;
@@ -22,13 +23,11 @@ function PostCommentForm({ postId, updatePostComments }) {
 	async function handleSubmit(e) {
 		try {
 			e.preventDefault();
-			isMounted && setIsSubmitting(true);
-			const data = await postData(
+			const data = await submitFormData(
 				`${process.env.REACT_APP_API_URL}/posts/${postId}/comments`,
 				state
 			);
 			if (isMounted) {
-				setIsSubmitting(false);
 				setState((prevState) => ({ ...prevState, body: '' }));
 				updatePostComments(postId);
 			}
@@ -46,7 +45,6 @@ function PostCommentForm({ postId, updatePostComments }) {
 				window.flashes(data.errors);
 			}
 		} catch (err) {
-			isMounted && setIsSubmitting(false);
 			window.flashes([
 				{ msg: 'Something went wrong, please try again later.' },
 			]);
