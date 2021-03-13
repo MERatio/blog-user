@@ -1,10 +1,12 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
+import useIsMounted from '../lib/useIsMounted';
 import { postData, handleExpressErr } from '../lib/helpers';
 import SubmitBtn from './SubmitBtn';
 
 function SignInForm({ setUser }) {
+	const isMounted = useIsMounted();
 	const history = useHistory();
 	const [state, setState] = useState({
 		username: '',
@@ -22,14 +24,14 @@ function SignInForm({ setUser }) {
 	async function handleSubmit(e) {
 		try {
 			e.preventDefault();
-			setIsSubmitting(true);
+			isMounted && setIsSubmitting(true);
 			const data = await postData(
 				`${process.env.REACT_APP_API_URL}/auth/sign-in`,
 				state
 			);
-			setIsSubmitting(false);
+			isMounted && setIsSubmitting(false);
 			if (data.err) {
-				setState((prevState) => ({ ...prevState, password: '' }));
+				isMounted && setState((prevState) => ({ ...prevState, password: '' }));
 				handleExpressErr(data.err);
 			} else {
 				localStorage.setItem('jwt', data.token);
@@ -40,7 +42,7 @@ function SignInForm({ setUser }) {
 				history.push('/');
 			}
 		} catch (err) {
-			setIsSubmitting(false);
+			isMounted && setIsSubmitting(false);
 			window.flashes([
 				{ msg: 'Something went wrong, please try again later.' },
 			]);

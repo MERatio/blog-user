@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useParams, useHistory } from 'react-router-dom';
+import useIsMounted from '../lib/useIsMounted';
 import { getData, handleExpressErr } from '../lib/helpers';
 import BootstrapSpinner from '../components/BootstrapSpinner';
 import Card from './Card';
@@ -8,6 +9,8 @@ import PostCommentForm from './PostCommentForm';
 import PostComments from './PostComments';
 
 function Post({ user }) {
+	const isMounted = useIsMounted();
+
 	const { postId } = useParams();
 
 	const history = useHistory();
@@ -32,8 +35,10 @@ function Post({ user }) {
 	}
 
 	async function updatePostComments(postId) {
-		const postComments = await fetchPostComments(postId);
-		setPostWithComments({ ...postWithComments, comments: postComments });
+		if (isMounted) {
+			const postComments = await fetchPostComments(postId);
+			setPostWithComments({ ...postWithComments, comments: postComments });
+		}
 	}
 
 	useEffect(() => {
@@ -58,13 +63,15 @@ function Post({ user }) {
 		}
 
 		async function fetchAndSetPostWithComments(postId) {
-			const post = await fetchPost(postId);
-			const postComments = await fetchPostComments(postId);
-			setPostWithComments({ ...post, comments: postComments });
+			if (isMounted) {
+				const post = await fetchPost(postId);
+				const postComments = await fetchPostComments(postId);
+				setPostWithComments({ ...post, comments: postComments });
+			}
 		}
 
 		fetchAndSetPostWithComments(postId);
-	}, [postId, history]);
+	}, [isMounted, postId, history]);
 
 	return postWithComments._id ? (
 		<section className="mb-4">

@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react';
+import useIsMounted from '../lib/useIsMounted';
 import { getData, handleExpressErr } from '../lib/helpers';
 import BootstrapSpinner from '../components/BootstrapSpinner';
 import Cards from './Cards';
 
 function Posts() {
+	const isMounted = useIsMounted();
 	const [postsWithComments, setPostsWithComments] = useState([]);
 
 	useEffect(() => {
@@ -51,13 +53,15 @@ function Posts() {
 		}
 
 		async function fetchAndSetPostsWithComments() {
-			const posts = await fetchPosts();
-			const newPostsWithComments = await fetchAndAttachPostsToComments(posts);
-			setPostsWithComments(newPostsWithComments);
+			if (isMounted) {
+				const posts = await fetchPosts();
+				const newPostsWithComments = await fetchAndAttachPostsToComments(posts);
+				setPostsWithComments(newPostsWithComments);
+			}
 		}
 
 		fetchAndSetPostsWithComments();
-	}, []);
+	}, [isMounted]);
 
 	return postsWithComments.length < 1 ? (
 		<BootstrapSpinner type={'border'} size={'2em'} />

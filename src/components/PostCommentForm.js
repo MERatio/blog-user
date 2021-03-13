@@ -1,9 +1,12 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
+import useIsMounted from '../lib/useIsMounted';
 import { postData, handleExpressErr } from '../lib/helpers';
 import SubmitBtn from './SubmitBtn';
 
 function PostCommentForm({ postId, updatePostComments }) {
+	const isMounted = useIsMounted();
+
 	const [state, setState] = useState({
 		body: '',
 	});
@@ -19,28 +22,31 @@ function PostCommentForm({ postId, updatePostComments }) {
 	async function handleSubmit(e) {
 		try {
 			e.preventDefault();
-			setIsSubmitting(true);
+			isMounted && setIsSubmitting(true);
 			const data = await postData(
 				`${process.env.REACT_APP_API_URL}/posts/${postId}/comments`,
 				state
 			);
-			setIsSubmitting(false);
-			setState((prevState) => ({ ...prevState, body: '' }));
-			updatePostComments(postId);
+			if (isMounted) {
+				setIsSubmitting(false);
+				setState((prevState) => ({ ...prevState, body: '' }));
+				updatePostComments(postId);
+			}
 			window.flashes([
 				{ msg: 'Comment successfully created', type: 'success' },
 			]);
 			if (data.err) {
 				handleExpressErr(data.err);
 			} else if (data.errors) {
-				setState((prevState) => ({
-					...prevState,
-					body: data.comment.body,
-				}));
+				isMounted &&
+					setState((prevState) => ({
+						...prevState,
+						body: data.comment.body,
+					}));
 				window.flashes(data.errors);
 			}
 		} catch (err) {
-			setIsSubmitting(false);
+			isMounted && setIsSubmitting(false);
 			window.flashes([
 				{ msg: 'Something went wrong, please try again later.' },
 			]);

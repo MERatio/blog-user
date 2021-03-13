@@ -1,9 +1,11 @@
 import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
+import useIsMounted from '../lib/useIsMounted';
 import { postData, handleExpressErr } from '../lib/helpers';
 import SubmitBtn from './SubmitBtn';
 
 function SignUpForm() {
+	const isMounted = useIsMounted();
 	const history = useHistory();
 	const [state, setState] = useState({
 		firstName: '',
@@ -24,22 +26,23 @@ function SignUpForm() {
 	async function handleSubmit(e) {
 		try {
 			e.preventDefault();
-			setIsSubmitting(true);
+			isMounted && setIsSubmitting(true);
 			const data = await postData(
 				`${process.env.REACT_APP_API_URL}/users`,
 				state
 			);
-			setIsSubmitting(false);
+			isMounted && setIsSubmitting(false);
 			if (data.err) {
 				handleExpressErr(data.err);
 			} else if (data.errors) {
-				setState({
-					firstName: data.userFormData.firstName,
-					lastName: data.userFormData.lastName,
-					username: data.userFormData.username,
-					password: '',
-					confirmPassword: '',
-				});
+				isMounted &&
+					setState({
+						firstName: data.userFormData.firstName,
+						lastName: data.userFormData.lastName,
+						username: data.userFormData.username,
+						password: '',
+						confirmPassword: '',
+					});
 				window.flashes(data.errors);
 			} else {
 				window.flashes([
