@@ -82,7 +82,7 @@ function Navbar({ user, signOut }) {
 }
 
 Navbar.propTypes = {
-	user: PropTypes.oneOfType([PropTypes.bool, PropTypes.object]),
+	user: PropTypes.oneOfType([PropTypes.bool, PropTypes.object]).isRequired,
 	signOut: PropTypes.func.isRequired,
 };
 
