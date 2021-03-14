@@ -7,9 +7,11 @@ import { postData, handleExpressErr } from '../lib/helpers';
 import SubmitBtn from './SubmitBtn';
 
 function SignInForm({ setUser }) {
+	const history = useHistory();
+
 	const isMounted = useIsMounted();
 	const [submitFormData, isSubmitting] = useIsLoading(postData);
-	const history = useHistory();
+
 	const [state, setState] = useState({
 		username: '',
 		password: '',

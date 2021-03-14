@@ -7,7 +7,6 @@ import Cards from './Cards';
 
 function Posts() {
 	const isMounted = useIsMounted();
-
 	const [getPosts, isGettingPosts] = useIsLoading(fetchAndSetPostsWithComments);
 
 	const [postsWithComments, setPostsWithComments] = useState([]);

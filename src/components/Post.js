@@ -10,12 +10,10 @@ import PostCommentForm from './PostCommentForm';
 import PostComments from './PostComments';
 
 function Post({ user }) {
-	const isMounted = useIsMounted();
-
 	const { postId } = useParams();
-
 	const history = useHistory();
 
+	const isMounted = useIsMounted();
 	const [getPost, isGettingPost] = useIsLoading(fetchAndSetPostWithComments);
 
 	const [postWithComments, setPostWithComments] = useState({});
