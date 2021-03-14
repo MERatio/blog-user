@@ -1,14 +1,18 @@
 import { useState, useEffect } from 'react';
 import useIsMounted from '../lib/useIsMounted';
+import useIsLoading from '../lib/useIsLoading';
 import { getData, handleExpressErr } from '../lib/helpers';
 import BootstrapSpinner from '../components/BootstrapSpinner';
 import Cards from './Cards';
 
 function Posts() {
 	const isMounted = useIsMounted();
+
+	const [getPosts, isGettingPosts] = useIsLoading(fetchAndSetPostsWithComments);
+
 	const [postsWithComments, setPostsWithComments] = useState([]);
 
-	useEffect(() => {
+	async function fetchAndSetPostsWithComments(isMounted) {
 		async function fetchPosts() {
 			try {
 				const data = await getData(`${process.env.REACT_APP_API_URL}/posts`);
@@ -52,18 +56,19 @@ function Posts() {
 			}
 		}
 
-		async function fetchAndSetPostsWithComments() {
-			if (isMounted) {
-				const posts = await fetchPosts();
-				const newPostsWithComments = await fetchAndAttachPostsToComments(posts);
-				setPostsWithComments(newPostsWithComments);
-			}
+		if (isMounted) {
+			const posts = await fetchPosts();
+			const newPostsWithComments = await fetchAndAttachPostsToComments(posts);
+			setPostsWithComments(newPostsWithComments);
 		}
+	}
 
-		fetchAndSetPostsWithComments();
+	useEffect(() => {
+		getPosts(isMounted);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [isMounted]);
 
-	return postsWithComments.length < 1 ? (
+	return isGettingPosts ? (
 		<BootstrapSpinner type={'border'} size={'2em'} />
 	) : (
 		<Cards items={postsWithComments} />

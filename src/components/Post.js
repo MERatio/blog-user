@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useParams, useHistory } from 'react-router-dom';
 import useIsMounted from '../lib/useIsMounted';
+import useIsLoading from '../lib/useIsLoading';
 import { getData, handleExpressErr } from '../lib/helpers';
 import BootstrapSpinner from '../components/BootstrapSpinner';
 import Card from './Card';
@@ -14,6 +15,8 @@ function Post({ user }) {
 	const { postId } = useParams();
 
 	const history = useHistory();
+
+	const [getPost, isGettingPost] = useIsLoading(fetchAndSetPostWithComments);
 
 	const [postWithComments, setPostWithComments] = useState({});
 
@@ -34,14 +37,7 @@ function Post({ user }) {
 		}
 	}
 
-	async function updatePostComments(postId) {
-		if (isMounted) {
-			const postComments = await fetchPostComments(postId);
-			setPostWithComments({ ...postWithComments, comments: postComments });
-		}
-	}
-
-	useEffect(() => {
+	async function fetchAndSetPostWithComments(isMounted, postId) {
 		async function fetchPost(postId) {
 			try {
 				const data = await getData(
@@ -62,18 +58,28 @@ function Post({ user }) {
 			}
 		}
 
-		async function fetchAndSetPostWithComments(postId) {
-			if (isMounted) {
-				const post = await fetchPost(postId);
-				const postComments = await fetchPostComments(postId);
-				setPostWithComments({ ...post, comments: postComments });
-			}
+		if (isMounted) {
+			const post = await fetchPost(postId);
+			const postComments = await fetchPostComments(postId);
+			setPostWithComments({ ...post, comments: postComments });
 		}
+	}
 
-		fetchAndSetPostWithComments(postId);
-	}, [isMounted, postId, history]);
+	async function updatePostComments(postId) {
+		if (isMounted) {
+			const postComments = await fetchPostComments(postId);
+			setPostWithComments({ ...postWithComments, comments: postComments });
+		}
+	}
 
-	return postWithComments._id ? (
+	useEffect(() => {
+		getPost(isMounted, postId);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [isMounted, postId]);
+
+	return isGettingPost ? (
+		<BootstrapSpinner type={'border'} size={'2em'} />
+	) : postWithComments._id ? (
 		<section className="mb-4">
 			<Card item={postWithComments} />
 			{user && postWithComments.published && (
@@ -84,9 +90,7 @@ function Post({ user }) {
 			)}
 			<PostComments postComments={postWithComments.comments} />
 		</section>
-	) : (
-		<BootstrapSpinner type={'border'} size={'2em'} />
-	);
+	) : null;
 }
 
 Post.propTypes = {
