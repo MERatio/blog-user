@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import format from 'date-fns/format';
 
 function PostComments({ postComments }) {
-	return (
+	return postComments.length > 0 ? (
 		<ul className="list-group">
 			{postComments.map((postComment) => (
 				<li key={postComment._id} className="list-group-item">
@@ -16,7 +16,7 @@ function PostComments({ postComments }) {
 				</li>
 			))}
 		</ul>
-	);
+	) : null;
 }
 
 PostComments.propTypes = {
