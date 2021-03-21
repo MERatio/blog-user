@@ -5,10 +5,10 @@ import Bus from './utils/Bus';
 import BootstrapSpinner from './components/BootstrapSpinner';
 import Navbar from './components/Navbar';
 import Flashes from './components/Flashes';
-import Posts from './components/Posts';
-import Post from './components/Post';
-import SignUpForm from './components/SignUpForm';
-import SignInForm from './components/SignInForm';
+import PostsPage from './pages/PostsPage';
+import PostPage from './pages/PostPage';
+import SignUpPage from './pages/SignUpPage';
+import SignInPage from './pages/SignInPage';
 import './App.css';
 
 function App() {
@@ -59,40 +59,16 @@ function App() {
 						<Redirect to="/posts" />
 					</Route>
 					<Route exact path="/posts">
-						<div className="h-100 container">
-							<div className="h-100 row justify-content-center">
-								<div className="col-md-8 position-relative">
-									<Posts />
-								</div>
-							</div>
-						</div>
+						<PostsPage />
 					</Route>
 					<Route exact path="/posts/:postId">
-						<div className="h-100 container">
-							<div className="h-100 row justify-content-center">
-								<div className="col-md-8 position-relative">
-									<Post user={user} />
-								</div>
-							</div>
-						</div>
+						<PostPage user={user} />
 					</Route>
 					<Route exact path="/sign-up">
-						<div className="container">
-							<div className="row justify-content-center">
-								<div className="col-md-6">
-									<SignUpForm />
-								</div>
-							</div>
-						</div>
+						<SignUpPage />
 					</Route>
 					<Route exact path="/sign-in">
-						<div className="container">
-							<div className="row justify-content-center">
-								<div className="col-md-6">
-									<SignInForm setUser={setUser} />
-								</div>
-							</div>
-						</div>
+						<SignInPage setUser={setUser} />
 					</Route>
 				</Switch>
 			</main>
