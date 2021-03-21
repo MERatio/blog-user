@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import useIsMounted from '../lib/useIsMounted';
-import useIsLoading from '../lib/useIsLoading';
 import { postData, handleExpressErr } from '../lib/helpers';
 import SubmitBtn from './SubmitBtn';
 
@@ -9,7 +8,6 @@ function SignUpForm() {
 	const history = useHistory();
 
 	const isMounted = useIsMounted();
-	const [submitFormData, isSubmitting] = useIsLoading(postData);
 
 	const [state, setState] = useState({
 		firstName: '',
@@ -18,6 +16,7 @@ function SignUpForm() {
 		password: '',
 		confirmPassword: '',
 	});
+	const [isSubmitting, setIsSubmitting] = useState(false);
 
 	function handleInputChange(e) {
 		const target = e.target;
@@ -29,10 +28,12 @@ function SignUpForm() {
 	async function handleSubmit(e) {
 		try {
 			e.preventDefault();
-			const data = await submitFormData(
+			setIsSubmitting(true);
+			const data = await postData(
 				`${process.env.REACT_APP_API_URL}/users`,
 				state
 			);
+			setIsSubmitting(false);
 			if (data.err) {
 				handleExpressErr(data.err);
 			} else if (data.errors) {

@@ -2,7 +2,6 @@ import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import useIsMounted from '../lib/useIsMounted';
-import useIsLoading from '../lib/useIsLoading';
 import { postData, handleExpressErr } from '../lib/helpers';
 import SubmitBtn from './SubmitBtn';
 
@@ -10,12 +9,12 @@ function SignInForm({ setUser }) {
 	const history = useHistory();
 
 	const isMounted = useIsMounted();
-	const [submitFormData, isSubmitting] = useIsLoading(postData);
 
 	const [state, setState] = useState({
 		username: '',
 		password: '',
 	});
+	const [isSubmitting, setIsSubmitting] = useState(false);
 
 	function handleInputChange(e) {
 		const target = e.target;
@@ -27,10 +26,12 @@ function SignInForm({ setUser }) {
 	async function handleSubmit(e) {
 		try {
 			e.preventDefault();
-			const data = await submitFormData(
+			setIsSubmitting(true);
+			const data = await postData(
 				`${process.env.REACT_APP_API_URL}/auth/sign-in`,
 				state
 			);
+			setIsSubmitting(false);
 			if (data.err) {
 				isMounted && setState((prevState) => ({ ...prevState, password: '' }));
 				handleExpressErr(data.err);
