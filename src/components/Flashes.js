@@ -1,32 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { nanoid } from 'nanoid';
-import Bus from '../utils/Bus';
+import React from 'react';
+import PropTypes from 'prop-types';
 
-function Flashes() {
-	const [flashes, setFlashes] = useState([]);
-
-	function deleteFlash(flashId) {
-		const newFlashes = flashes.filter((flash) => flash.id !== flashId);
-		setFlashes(newFlashes);
-	}
-
-	useEffect(() => {
-		Bus.addListener('flashes', (flashes) => {
-			const flashesWithId = flashes.map((flash) => ({
-				...flash,
-				id: nanoid(),
-			}));
-			setFlashes(flashesWithId);
-		});
-	}, []);
-
-	useEffect(() => {
-		if (flashes.length > 0) {
-			const timeoutId = setTimeout(() => setFlashes([]), 4000);
-			return () => clearTimeout(timeoutId);
-		}
-	}, [flashes]);
-
+function Flashes({ flashes, onFlashDelete }) {
 	return (
 		<React.Fragment>
 			{flashes.map((flash) => (
@@ -40,7 +15,7 @@ function Flashes() {
 						type="button"
 						className="close"
 						aria-label="Close"
-						onClick={() => deleteFlash(flash.id)}
+						onClick={() => onFlashDelete(flash.id)}
 					>
 						<span aria-hidden="true">&times;</span>
 					</button>
@@ -49,5 +24,10 @@ function Flashes() {
 		</React.Fragment>
 	);
 }
+
+Flashes.propTypes = {
+	flashes: PropTypes.array.isRequired,
+	onFlashDelete: PropTypes.func.isRequired,
+};
 
 export default Flashes;

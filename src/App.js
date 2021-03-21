@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Switch, Route, Redirect, useHistory } from 'react-router-dom';
+import { nanoid } from 'nanoid';
 import { getData } from './lib/helpers';
 import Bus from './utils/Bus';
 import BootstrapSpinner from './components/BootstrapSpinner';
@@ -15,6 +16,7 @@ function App() {
 	const history = useHistory();
 
 	const [user, setUser] = useState(null);
+	const [flashes, setFlashes] = useState([]);
 
 	function signOut() {
 		localStorage.removeItem('jwt');
@@ -25,9 +27,31 @@ function App() {
 		history.push('/');
 	}
 
+	function deleteFlash(flashId) {
+		const newFlashes = flashes.filter((flash) => flash.id !== flashId);
+		setFlashes(newFlashes);
+	}
+
+	useEffect(() => {
+		Bus.addListener('flashes', (flashes) => {
+			const flashesWithId = flashes.map((flash) => ({
+				...flash,
+				id: nanoid(),
+			}));
+			setFlashes(flashesWithId);
+		});
+	}, []);
+
 	useEffect(() => {
 		window.flashes = (flashes) => Bus.emit('flashes', flashes);
 	}, []);
+
+	useEffect(() => {
+		if (flashes.length > 0) {
+			const timeoutId = setTimeout(() => setFlashes([]), 4000);
+			return () => clearTimeout(timeoutId);
+		}
+	}, [flashes]);
 
 	useEffect(() => {
 		async function fetchAndSetUser() {
@@ -49,7 +73,7 @@ function App() {
 			<div className="container">
 				<div className="row justify-content-center">
 					<div className="col-md-8">
-						<Flashes />
+						<Flashes flashes={flashes} onFlashDelete={deleteFlash} />
 					</div>
 				</div>
 			</div>
