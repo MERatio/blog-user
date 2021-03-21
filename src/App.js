@@ -65,10 +65,10 @@ function App() {
 						<PostPage user={user} />
 					</Route>
 					<Route exact path="/sign-up">
-						<SignUpPage />
+						{user ? <Redirect to="/" /> : <SignUpPage />}
 					</Route>
 					<Route exact path="/sign-in">
-						<SignInPage setUser={setUser} />
+						{user ? <Redirect to="/" /> : <SignInPage setUser={setUser} />}
 					</Route>
 				</Switch>
 			</main>
