@@ -53,7 +53,7 @@ function App() {
 					</div>
 				</div>
 			</div>
-			<main className="h-100">
+			<main>
 				<Switch>
 					<Route exact path="/">
 						<Redirect to="/posts" />

@@ -79,7 +79,9 @@ function Post({ user }) {
 	}, [isMounted, postId]);
 
 	return isFetchingPostWithComments ? (
-		<BootstrapSpinner type={'border'} size={'2em'} />
+		<div className="bootstrap-spinner-container">
+			<BootstrapSpinner type={'border'} size={'2em'} />
+		</div>
 	) : postWithComments._id ? (
 		<section className="mb-4">
 			<Card item={postWithComments} />

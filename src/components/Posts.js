@@ -72,7 +72,9 @@ function Posts() {
 	}, [isMounted]);
 
 	return isFetchingPostsWithComments ? (
-		<BootstrapSpinner type={'border'} size={'2em'} />
+		<div className="bootstrap-spinner-container">
+			<BootstrapSpinner type={'border'} size={'2em'} />
+		</div>
 	) : (
 		<Cards items={postsWithComments} />
 	);

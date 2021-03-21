@@ -3,9 +3,9 @@ import Post from '../components/Post';
 
 function PostPage({ user }) {
 	return (
-		<div className="h-100 container">
-			<div className="h-100 row justify-content-center">
-				<div className="col-md-8 position-relative">
+		<div className="container">
+			<div className="row justify-content-center">
+				<div className="col-md-8">
 					<Post user={user} />
 				</div>
 			</div>
