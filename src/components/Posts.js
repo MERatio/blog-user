@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import useIsMounted from '../lib/useIsMounted';
 import { getData, handleExpressErr } from '../lib/helpers';
 import BootstrapSpinner from '../components/BootstrapSpinner';
-import Cards from './Cards';
+import PostsCards from './PostsCards';
 
 function Posts() {
 	const isMounted = useIsMounted();
@@ -76,7 +76,7 @@ function Posts() {
 			<BootstrapSpinner type={'border'} size={'2em'} />
 		</div>
 	) : (
-		<Cards items={postsWithComments} />
+		<PostsCards posts={postsWithComments} />
 	);
 }
 

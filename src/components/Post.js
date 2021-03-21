@@ -4,7 +4,7 @@ import { useParams, useHistory } from 'react-router-dom';
 import useIsMounted from '../lib/useIsMounted';
 import { getData, handleExpressErr } from '../lib/helpers';
 import BootstrapSpinner from '../components/BootstrapSpinner';
-import Card from './Card';
+import PostCard from './PostCard';
 import PostCommentForm from './PostCommentForm';
 import PostComments from './PostComments';
 
@@ -84,7 +84,7 @@ function Post({ user }) {
 		</div>
 	) : postWithComments._id ? (
 		<section className="mb-4">
-			<Card item={postWithComments} />
+			<PostCard post={postWithComments} />
 			{user && postWithComments.published && (
 				<PostCommentForm
 					postId={postId}
