@@ -30,14 +30,14 @@ function App() {
 	}, []);
 
 	useEffect(() => {
-		async function getCurrentUser() {
+		async function fetchAndSetUser() {
 			const data = await getData(
 				`${process.env.REACT_APP_API_URL}/users/current-user`
 			);
 			setUser(data.user);
 		}
-		getCurrentUser();
-		const intervalId = setInterval(getCurrentUser, 30000);
+		fetchAndSetUser();
+		const intervalId = setInterval(fetchAndSetUser, 30000);
 		return () => clearInterval(intervalId);
 	}, []);
 
