@@ -99,7 +99,7 @@ function SignUpForm() {
 					name="username"
 					value={state.username}
 					required
-					pattern="^[a-z0-9-_]+$/i"
+					pattern="^[a-zA-Z0-9-_]+$"
 					title="Username can only contain letters, numbers, - and _'"
 					maxLength="20"
 					onChange={handleInputChange}
