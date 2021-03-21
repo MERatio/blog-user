@@ -28,13 +28,6 @@ function PostCommentForm({ postId, updatePostComments }) {
 				state
 			);
 			setIsSubmitting(false);
-			if (isMounted) {
-				setState((prevState) => ({ ...prevState, body: '' }));
-				updatePostComments(postId);
-			}
-			window.flashes([
-				{ msg: 'Comment successfully created', type: 'success' },
-			]);
 			if (data.err) {
 				handleExpressErr(data.err);
 			} else if (data.errors) {
@@ -44,6 +37,14 @@ function PostCommentForm({ postId, updatePostComments }) {
 						body: data.comment.body,
 					}));
 				window.flashes(data.errors);
+			} else {
+				if (isMounted) {
+					setState((prevState) => ({ ...prevState, body: '' }));
+					updatePostComments(postId);
+				}
+				window.flashes([
+					{ msg: 'Comment successfully created', type: 'success' },
+				]);
 			}
 		} catch (err) {
 			window.flashes([
