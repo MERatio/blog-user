@@ -14,7 +14,7 @@ function Post({ user }) {
 
 	const isMounted = useIsMounted();
 
-	const [isFetchingPostWithComments, setIsFetchingPostsWithComments] = useState(
+	const [isFetchingPostWithComments, setIsFetchingPostWithComments] = useState(
 		false
 	);
 	const [postWithComments, setPostWithComments] = useState({});
@@ -58,10 +58,10 @@ function Post({ user }) {
 		}
 
 		if (isMounted) {
-			setIsFetchingPostsWithComments(true);
+			setIsFetchingPostWithComments(true);
 			const post = await fetchPost(postId);
 			const postComments = await fetchPostComments(postId);
-			setIsFetchingPostsWithComments(false);
+			setIsFetchingPostWithComments(false);
 			setPostWithComments({ ...post, comments: postComments });
 		}
 	}
