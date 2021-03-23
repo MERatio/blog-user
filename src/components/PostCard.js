@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import format from 'date-fns/format';
+import pluralize from 'pluralize';
 
 function PostCard({ post, postCommentsLength }) {
 	return (
@@ -17,10 +18,11 @@ function PostCard({ post, postCommentsLength }) {
 			<div className="card-body">
 				<p className="card-text">{post.body}</p>
 				<Link to={`/posts/${post._id}`} className="card-link">
-					{post.comments
-						? `${post.comments.length} `
-						: `${postCommentsLength} `}
-					comments
+					{pluralize(
+						'comments',
+						post.comments ? post.comments.length : postCommentsLength,
+						true
+					)}
 				</Link>
 			</div>
 		</div>
