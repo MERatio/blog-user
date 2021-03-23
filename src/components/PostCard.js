@@ -19,9 +19,7 @@ function PostCard({ post, postCommentsLength }) {
 				<Link to={`/posts/${post._id}`} className="card-link">
 					{post.comments
 						? `${post.comments.length} `
-						: postCommentsLength
-						? `${postCommentsLength} `
-						: ''}
+						: `${postCommentsLength} `}
 					comments
 				</Link>
 			</div>
