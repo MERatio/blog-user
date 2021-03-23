@@ -57,17 +57,15 @@ function Posts() {
 			}
 		}
 
-		if (isMounted) {
-			setIsFetchingPostsWithComments(true);
-			const posts = await fetchPosts();
-			const newPostsWithComments = await fetchAndAttachPostsToComments(posts);
-			setIsFetchingPostsWithComments(false);
-			setPostsWithComments(newPostsWithComments);
-		}
+		setIsFetchingPostsWithComments(true);
+		const posts = await fetchPosts();
+		const newPostsWithComments = await fetchAndAttachPostsToComments(posts);
+		setIsFetchingPostsWithComments(false);
+		setPostsWithComments(newPostsWithComments);
 	}
 
 	useEffect(() => {
-		fetchAndSetPostsWithComments();
+		isMounted && fetchAndSetPostsWithComments();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [isMounted]);
 
