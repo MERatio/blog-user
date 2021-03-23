@@ -70,7 +70,7 @@ function Posts() {
 	}, [isMounted]);
 
 	return isFetchingPostsWithComments ? (
-		<div className="bootstrap-spinner-container">
+		<div className="position-relative" style={{ minHeight: '30em' }}>
 			<BootstrapSpinner type={'border'} size={'2em'} />
 		</div>
 	) : (
