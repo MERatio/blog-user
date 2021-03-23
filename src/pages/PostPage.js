@@ -1,12 +1,117 @@
+import { useState, useEffect } from 'react';
+import { useParams, useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import Post from '../components/Post';
+import useIsMounted from '../lib/useIsMounted';
+import { getData, handleExpressErr } from '../lib/helpers';
+import BootstrapSpinner from '../components/BootstrapSpinner';
+import PostCard from '../components/PostCard';
+import PostCommentForm from '../components/PostCommentForm';
+import PostComments from '../components/PostComments';
 
 function PostPage({ user }) {
+	const { postId } = useParams();
+	const history = useHistory();
+
+	const isMounted = useIsMounted();
+
+	const [isFetchingPost, setIsFetchingPost] = useState(false);
+	const [post, setPost] = useState({});
+	const [isFetchingPostComments, setIsFetchingPostComments] = useState(false);
+	const [postComments, setPostComments] = useState([]);
+
+	async function fetchPostComments(postId) {
+		try {
+			const data = await getData(
+				`${process.env.REACT_APP_API_URL}/posts/${postId}/comments`
+			);
+			if (data.err) {
+				handleExpressErr(data.err);
+			} else {
+				return data.comments;
+			}
+		} catch (err) {
+			window.flashes([
+				{ msg: 'Something went wrong, please try again later.' },
+			]);
+		}
+	}
+
+	async function updatePostComments(postId) {
+		if (isMounted) {
+			const postComments = await fetchPostComments(postId);
+			setPostComments([...postComments]);
+		}
+	}
+
+	useEffect(() => {
+		async function fetchPost(postId) {
+			try {
+				const data = await getData(
+					`${process.env.REACT_APP_API_URL}/posts/${postId}`
+				);
+				if (data.err) {
+					if ([401, 404].includes(data.err.status)) {
+						history.push('/');
+					}
+					handleExpressErr(data.err);
+				} else {
+					return data.post;
+				}
+			} catch (err) {
+				window.flashes([
+					{ msg: 'Something went wrong, please try again later.' },
+				]);
+			}
+		}
+
+		async function fetchAndSetPostAndPostComments(postId) {
+			setIsFetchingPost(true);
+			const post = await fetchPost(postId);
+			setIsFetchingPost(false);
+			setPost(post);
+			setIsFetchingPostComments(true);
+			const postComments = await fetchPostComments(postId);
+			setIsFetchingPostComments(false);
+			setPostComments(postComments);
+		}
+
+		isMounted && fetchAndSetPostAndPostComments(postId);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [isMounted, postId]);
+
 	return (
 		<div className="container">
 			<div className="row justify-content-center">
 				<div className="col-md-8">
-					<Post user={user} />
+					<section>
+						{isFetchingPost ? (
+							<div className="bootstrap-spinner-container">
+								<BootstrapSpinner type={'border'} size={'2em'} />
+							</div>
+						) : (
+							post._id && (
+								<>
+									<PostCard
+										post={post}
+										postCommentsLength={postComments.length}
+									/>
+									{user && post.published && (
+										<PostCommentForm
+											postId={postId}
+											updatePostComments={updatePostComments}
+										/>
+									)}
+								</>
+							)
+						)}
+						{isFetchingPostComments ? (
+							<div className="bootstrap-spinner-container">
+								<BootstrapSpinner type={'border'} size={'2em'} />
+							</div>
+						) : (
+							<PostComments postComments={postComments} />
+						)}
+					</section>
 				</div>
 			</div>
 		</div>

@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import format from 'date-fns/format';
 
-function PostCard({ post }) {
+function PostCard({ post, postCommentsLength }) {
 	return (
 		<div className="card mb-2">
 			<div className="card-header">
@@ -17,7 +17,12 @@ function PostCard({ post }) {
 			<div className="card-body">
 				<p className="card-text">{post.body}</p>
 				<Link to={`/posts/${post._id}`} className="card-link">
-					{post.comments.length} comments
+					{post.comments
+						? `${post.comments.length} `
+						: postCommentsLength
+						? `${postCommentsLength} `
+						: ''}
+					comments
 				</Link>
 			</div>
 		</div>
@@ -26,6 +31,7 @@ function PostCard({ post }) {
 
 PostCard.propTypes = {
 	post: PropTypes.object.isRequired,
+	postCommentsLength: PropTypes.number,
 };
 
 export default PostCard;
