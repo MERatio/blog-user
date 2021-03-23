@@ -5,7 +5,7 @@ import pluralize from 'pluralize';
 
 function PostCard({ post, postCommentsLength }) {
 	return (
-		<div className="card mb-2">
+		<article className="card mb-2">
 			<div className="card-header">
 				<h5 className="card-title">{post.title}</h5>
 				<p className="card-subtitle mb-2">
@@ -25,7 +25,7 @@ function PostCard({ post, postCommentsLength }) {
 					)}
 				</Link>
 			</div>
-		</div>
+		</article>
 	);
 }
 

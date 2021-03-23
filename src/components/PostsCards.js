@@ -6,7 +6,7 @@ function PostsCards({ posts }) {
 		<PostCard key={post._id} post={post} />
 	));
 
-	return <section>{postsCards}</section>;
+	return <>{postsCards}</>;
 }
 
 PostsCards.propTypes = {
