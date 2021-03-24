@@ -1,8 +1,13 @@
 # blog-user
 
-A frontend to read and comment on blog posts that uses [my blog API](https://github.com/MERatio/blog-api).
-
 For more information about this project visit [The Odin Project](https://www.theodinproject.com/lessons/blog-api).
+
+## Features
+
+- User registration
+- User authentication
+- Read posts
+- Read, create comments
 
 ## Built With
 
