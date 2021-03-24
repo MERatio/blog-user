@@ -7,13 +7,10 @@ import PostsCards from './PostsCards';
 function Posts() {
 	const isMounted = useIsMounted();
 
-	const [
-		isFetchingPostsWithComments,
-		setIsFetchingPostsWithComments,
-	] = useState(false);
-	const [postsWithComments, setPostsWithComments] = useState([]);
+	const [isFetchingPosts, setIsFetchingPosts] = useState(false);
+	const [posts, setPosts] = useState([]);
 
-	async function fetchAndSetPostsWithComments() {
+	async function fetchAndSetPosts() {
 		async function fetchPosts() {
 			try {
 				const data = await getData(`${process.env.REACT_APP_API_URL}/posts`);
@@ -57,24 +54,24 @@ function Posts() {
 			}
 		}
 
-		setIsFetchingPostsWithComments(true);
+		setIsFetchingPosts(true);
 		const posts = await fetchPosts();
-		const newPostsWithComments = await fetchAndAttachPostsToComments(posts);
-		setIsFetchingPostsWithComments(false);
-		setPostsWithComments(newPostsWithComments);
+		const newPosts = await fetchAndAttachPostsToComments(posts);
+		setIsFetchingPosts(false);
+		setPosts(newPosts);
 	}
 
 	useEffect(() => {
-		isMounted && fetchAndSetPostsWithComments();
+		isMounted && fetchAndSetPosts();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [isMounted]);
 
-	return isFetchingPostsWithComments ? (
+	return isFetchingPosts ? (
 		<div className="position-relative" style={{ minHeight: '30em' }}>
 			<BootstrapSpinner type={'border'} size={'2em'} />
 		</div>
 	) : (
-		<PostsCards posts={postsWithComments} />
+		<PostsCards posts={posts} />
 	);
 }
 
