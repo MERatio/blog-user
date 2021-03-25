@@ -56,7 +56,7 @@ function Navbar({ user, signOut }) {
 							<li className="nav-item">
 								<NavLink
 									exact
-									to="/sign-up"
+									to="/auth/sign-up"
 									className="nav-link"
 									activeClassName="active"
 								>
@@ -66,7 +66,7 @@ function Navbar({ user, signOut }) {
 							<li className="nav-item">
 								<NavLink
 									exact
-									to="/sign-in"
+									to="/auth/sign-in"
 									className="nav-link"
 									activeClassName="active"
 								>
