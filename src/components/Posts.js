@@ -26,39 +26,10 @@ function Posts() {
 			}
 		}
 
-		async function fetchAndAttachPostsToComments(posts) {
-			try {
-				const postsWithComments = await Promise.all(
-					posts.map(async (post) => {
-						try {
-							const data = await getData(
-								`${process.env.REACT_APP_API_URL}/posts/${post._id}/comments`
-							);
-							if (data.err) {
-								handleExpressErr(data.err);
-							} else {
-								return { ...post, comments: data.comments };
-							}
-						} catch (err) {
-							window.flashes([
-								{ msg: 'Something went wrong, please try again later.' },
-							]);
-						}
-					})
-				);
-				return postsWithComments;
-			} catch (err) {
-				window.flashes([
-					{ msg: 'Something went wrong, please try again later.' },
-				]);
-			}
-		}
-
 		setIsFetchingPosts(true);
 		const posts = await fetchPosts();
-		const newPosts = await fetchAndAttachPostsToComments(posts);
 		setIsFetchingPosts(false);
-		setPosts(newPosts);
+		setPosts(posts);
 	}
 
 	useEffect(() => {

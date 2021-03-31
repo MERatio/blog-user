@@ -15,9 +15,10 @@ function PostPage({ user }) {
 	const isMounted = useIsMounted();
 
 	const [isFetchingPost, setIsFetchingPost] = useState(false);
-	const [post, setPost] = useState({});
+	const [post, setPost] = useState({
+		comments: [],
+	});
 	const [isFetchingPostComments, setIsFetchingPostComments] = useState(false);
-	const [postComments, setPostComments] = useState([]);
 
 	async function fetchPostComments(postId) {
 		try {
@@ -38,8 +39,10 @@ function PostPage({ user }) {
 
 	async function updatePostComments(postId) {
 		if (isMounted) {
+			setIsFetchingPostComments(true);
 			const postComments = await fetchPostComments(postId);
-			setPostComments([...postComments]);
+			setIsFetchingPostComments(false);
+			setPost((prevPost) => ({ ...prevPost, comments: postComments }));
 		}
 	}
 
@@ -64,18 +67,16 @@ function PostPage({ user }) {
 			}
 		}
 
-		async function fetchAndSetPostAndPostComments(postId) {
+		async function fetchAndSetPost(postId) {
 			setIsFetchingPost(true);
+			setIsFetchingPostComments(true);
 			const post = await fetchPost(postId);
 			setIsFetchingPost(false);
-			setPost(post);
-			setIsFetchingPostComments(true);
-			const postComments = await fetchPostComments(postId);
 			setIsFetchingPostComments(false);
-			setPostComments(postComments);
+			setPost(post);
 		}
 
-		isMounted && fetchAndSetPostAndPostComments(postId);
+		isMounted && fetchAndSetPost(postId);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [isMounted, postId]);
 
@@ -94,10 +95,7 @@ function PostPage({ user }) {
 						) : (
 							post._id && (
 								<>
-									<PostCard
-										post={post}
-										postCommentsLength={postComments.length}
-									/>
+									<PostCard post={post} />
 									{user && post.published && (
 										<PostCommentForm
 											postId={postId}
@@ -112,7 +110,7 @@ function PostPage({ user }) {
 								<BootstrapSpinner type={'border'} size={'2em'} />
 							</div>
 						) : (
-							<PostComments postComments={postComments} />
+							<PostComments postComments={post.comments} />
 						)}
 					</section>
 				</div>
