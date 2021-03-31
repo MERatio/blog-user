@@ -26,6 +26,9 @@ function PostPage({ user }) {
 				`${process.env.REACT_APP_API_URL}/posts/${postId}/comments`
 			);
 			if (data.err) {
+				if ([401, 404].includes(data.err.status)) {
+					history.push('/');
+				}
 				handleExpressErr(data.err);
 			} else {
 				return data.comments;
